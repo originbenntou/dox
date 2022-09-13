@@ -6,7 +6,7 @@
 
 ### 目指してる認証シーケンス
 
-https://github.com/aws-samples/cognito-custom-authentication/blob/main/docs/auth_sequence.png
+![MFA付認証シーケンス](https://github.com/aws-samples/cognito-custom-authentication/blob/main/docs/auth_sequence.png)
 
 ### 認証の仕様
 
@@ -109,17 +109,18 @@ https://github.com/aws-samples/cognito-custom-authentication/blob/main/docs/auth
 - USER_PASSWORD_AUTH（ADMIN_USER_PASSWORD_AUTH）
 	- SRPプロトコルを使用せず、パスワード平文を送って認証する。非推奨。
 - USER_SRP_AUTH
-	- SRPプロトコルに基づいた方法でチャンレンジレスポンス認証する。元のパスワードを通信路に流さず、サーバー側でパスワードが不明な状態になるため安全。
+	- SRPプロトコルに基づいた方法でチャンレンジレスポンス認証する。
 - CUSTOM_AUTH
 	- 認証時にLambda関数がトリガーされ、追加の認証など認証のカスマイズができる。
 - REFRESH_TOKEN_AUTH
 	- 更新トークンから新しいトークンをもらう。
 
-### SRPプロトコル
+### SRP
 
-（いい感じに要約）
+SRP とは Secure Remote Password (SRP) プロトコルは、ネットワークの認証方式であり、暗号化されていない通信路を介してユーザ名とパスワードを使った認証を行う。
+また、SRP は認証とともに暗号鍵を生成するための共有情報を提供し、安全な鍵交換を実現する。
 
-https://medium.com/swlh/what-is-secure-remote-password-srp-protocol-and-how-to-use-it-70e415b94a76
+[SRP - 参考記事](https://medium.com/swlh/what-is-secure-remote-password-srp-protocol-and-how-to-use-it-70e415b94a76)
 
 - サーバーはパスワードと同等の情報 (ハッシュ) を保存する必要がない
 - ネットワーク経由でパスワードを送信する必要なく、盗聴者や中間者は攻撃を実行するための意味のある情報を取得できない
@@ -140,7 +141,7 @@ __YOU CAN'T LEAK PASSWORD IF YOU DON'T STORE PASSOWRD__
 
 ハッシュ化された値は不可逆式なので、盗聴されても元のパスワードに戻すことができないので、セキュリティが高くなります。
 
-https://itmanabi.com/challenge-response/
+[チャレンジレスポンス - 参考記事](https://itmanabi.com/challenge-response/)
 
 - 利用者がサーバにアクセスを要求する
 - サーバ側でチャレンジを作成し、利用者側に送る
@@ -154,13 +155,15 @@ https://itmanabi.com/challenge-response/
 
 ## USER_SRP_AUTH
 
-https://d1.awsstatic.com/webinars/jp/pdf/services/20200630_AWS_BlackBelt_Amazon%20Cognito.pdf#page=34
+SRPプロトコルで認証
+
+[Blackbelt - USER_SRP_AUTH](https://d1.awsstatic.com/webinars/jp/pdf/services/20200630_AWS_BlackBelt_Amazon%20Cognito.pdf#page=34)
 
 ## CUSTOM_AUTH
 
-（いい感じの要約）
+USER_PASSWORD_AUTH,USER_SRP_AUTHでまかなえない認証フローにしたければCUSTOM_AUTHをつかう
 
-https://d1.awsstatic.com/webinars/jp/pdf/services/20200630_AWS_BlackBelt_Amazon%20Cognito.pdf#page=38
+[Blackbelt - CUSTOM_AUTH](https://d1.awsstatic.com/webinars/jp/pdf/services/20200630_AWS_BlackBelt_Amazon%20Cognito.pdf#page=38)
 
 - 実現できる内容の例
 	- Cognito とは別方式の MFA 認証を行う
