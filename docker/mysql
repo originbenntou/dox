@@ -1,0 +1,34 @@
+docker run -it -d --rm mysql -e MYSQL_ROOT_PASSWORD=root -p 3306:3306
+
+create table mydb.usera (
+id int,
+name varchar(10)
+);
+
+create table mydb.userb (
+id int,
+name varchar(10)
+);
+
+
+insert into usera values
+(1,'Yamada1'),
+(2,'Yamada2'),
+(3,'Yamada3'),
+(4,'Yamada4'),
+(5,'Yamada5');
+
+
+insert into userb values
+(1,'Sato1'),
+(2,'Sato2'),
+(3,'Sato3'),
+(4,'Sato4'),
+(5,'Sato5'),
+(6,'Yamada1'),
+(7,'Yamada3');
+
+
+select * from usera union all select * from userb b where not exists ( select * from usera a where a.name = b.name );
+
+select * from usera union all select * from userb b where b.name not in ( select name from usera );
